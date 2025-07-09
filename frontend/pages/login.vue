@@ -9,9 +9,9 @@
       >
         <div class="flex items-center h-full px-20 bg-opacity-40">
           <div>
-            <h2 class="text-3xl font-black text-white sm:text-3xl">Momentum</h2>
+            <h2 class="text-5xl font-black text-white">Momentum</h2>
 
-            <p class="max-w-xl mt-3 text-white font-bold">
+            <p class="text-2xl max-w-xl mt-3 text-white font-bold">
               The Next Generation Productivity Web App
             </p>
           </div>
@@ -97,3 +97,7 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+const a = ref(1);
+</script>
