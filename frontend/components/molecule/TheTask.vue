@@ -41,15 +41,13 @@ const props = defineProps<{ task: Task }>();
       </div>
     </td>
     <td class="px-4 py-4 text-sm whitespace-nowrap">
-      <div class="flex flex-col">
-        <NuxtLink
-          :to="`/tasks/${task.id}/edit`"
-          class="text-gray-700 dark:text-gray-200"
+      <div class="flex flex-col gap-2">
+        <NuxtLink :to="`/tasks/${task.id}/edit`" class="text-blue-500 underline"
           >Edit</NuxtLink
         >
         <NuxtLink
           :to="`/tasks/${task.id}/delete`"
-          class="text-gray-700 dark:text-gray-200"
+          class="text-blue-500 underline"
           >Delete</NuxtLink
         >
       </div>
