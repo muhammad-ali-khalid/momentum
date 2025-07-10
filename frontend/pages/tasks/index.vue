@@ -41,7 +41,8 @@ const tasks: Array<Task> = [
 
 <template>
   <div class="h-screen w-screen dark:bg-gray-900">
-    <section class="container px-4 mx-auto">
+    <section class="container px-10 mx-auto">
+      <p class="text-2xl">All Tasks</p>
       <div class="flex flex-col">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div
@@ -109,9 +110,9 @@ const tasks: Array<Task> = [
 
     <div class="flex justify-center mt-5">
       <NuxtLink
+        to="/tasks/new"
         class="px-10 py-2 text-md text-gray-700 transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 hover:cursor-pointer dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-        to="/login"     
-        >
+      >
         New Task
       </NuxtLink>
     </div>
