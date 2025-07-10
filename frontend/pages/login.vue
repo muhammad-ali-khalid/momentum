@@ -97,7 +97,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-const a = ref(1);
-</script>
