@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="h-screen dark:bg-gray-800">
+  <div class="h-screen dark:bg-gray-800">
     <section class="max-w-4xl p-6 mx-auto bg-white rounded-md dark:bg-gray-800">
       <form method="post">
         <div class="flex flex-col gap-6 mt-4">
@@ -50,5 +50,5 @@
         </div>
       </form>
     </section>
-  </div> -->
+  </div>
 </template>
