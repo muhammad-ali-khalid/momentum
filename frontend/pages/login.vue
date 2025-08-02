@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { NuxtLink } from "#components";
+
+const { $axios } = useNuxtApp();
+
+const email = ref(null);
+const password = ref(null);
+let isAuthenticated = false;
+
+async function processForm() {
+  // const res = await $axios.post(
+  //   "login",
+  //   {
+  //     email: email.value,
+  //     password: password.value,
+  //   },
+  //   {
+  //     headers: {
+  //       Accept: "application/json",
+  //     },
+  //   }
+  // );
+  // console.log(res.data.token);
+  // await navigateTo("/tasks");
+  const res = await $axios.get("test");
+  console.log(res.data);
+}
+</script>
+
 <template>
   <div class="bg-white dark:bg-gray-900">
     <div class="flex justify-center h-screen">
@@ -35,7 +64,7 @@
           </div>
 
           <div class="mt-8">
-            <form>
+            <form @submit.prevent="processForm">
               <div>
                 <label
                   for="email"
@@ -43,6 +72,7 @@
                   >Email Address</label
                 >
                 <input
+                  v-model="email"
                   type="email"
                   name="email"
                   id="email"
@@ -66,6 +96,7 @@
                 </div>
 
                 <input
+                  v-model="password"
                   type="password"
                   name="password"
                   id="password"
@@ -76,7 +107,7 @@
 
               <div class="mt-6">
                 <button
-                  class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                  class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 hover:cursor-pointer focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
                 >
                   Sign in
                 </button>
