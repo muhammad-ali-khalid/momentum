@@ -12,9 +12,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return [
-            'message' => 'All tasks here'
-        ];
+        return Task::all();
     }
 
     /**
@@ -22,7 +20,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            ''
+        ])
     }
 
     /**
@@ -30,7 +30,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return $task;
     }
 
     /**

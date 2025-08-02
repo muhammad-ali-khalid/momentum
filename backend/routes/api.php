@@ -20,8 +20,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::apiResource('tasks', TaskController::class);
 
 
-// // Protected routes
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     Route::apiResource('tasks', TaskController::class);
-//     Route::post('/logout', [AuthController::class, 'logout']);
-// });
+// Protected routes
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource('tasks', TaskController::class);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
