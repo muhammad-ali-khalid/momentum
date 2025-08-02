@@ -22,8 +22,6 @@ async function processForm() {
   // );
   // console.log(res.data.token);
   // await navigateTo("/tasks");
-  const res = await $axios.get("test");
-  console.log(res.data);
 }
 </script>
 

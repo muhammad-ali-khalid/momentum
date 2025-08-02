@@ -12,7 +12,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        return [
+            'message' => 'All tasks here'
+        ];
     }
 
     /**
