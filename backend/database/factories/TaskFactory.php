@@ -16,12 +16,23 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $dueDate = fake()->dateTimeBetween('-5 days', '+5 days')->format('Y-m-d H:i');
+
+        // Determine status based on due date
+        if ($dueDate < now()) {
+            $status = fake()->randomElement(['completed', 'missed']);
+        } elseif ($dueDate  >  now()->format('Y-m-d H:i')) {
+            $status = 'active';
+        } else {
+            $status = 'active';
+        }
+
         return [
             'user_id' => fake()->numberBetween(1, 5),
             'title' => fake()->realText(15),
-            'description' => fake()->realText(15),
-            'due_date' => fake()->realText(15),
-            'status' => fake()->randomElement(['active', 'completed', 'missed']),
+            'description' => fake()->realText(35),
+            'due_date' => $dueDate,
+            'status' => $status,
         ];
     }
 }
