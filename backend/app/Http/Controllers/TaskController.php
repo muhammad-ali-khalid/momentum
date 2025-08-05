@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
@@ -12,7 +13,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return Task::where('user_id', auth()->id())->get();
     }
 
     /**
@@ -20,20 +21,18 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
         $fields = $request->validate([
             'title' => 'required|string|max:15',
             'description' => 'required|string|max:35',
             'due_date' => 'required|date_format:Y-m-d H:i|after:now'
         ]);
 
-        $fields['user_id'] = 4;
         $fields['status'] = 'active';
 
-        Task::create($fields);
+        $task = $request->user()->tasks()->create($fields);
 
-        return [
-            'message' => 'The task has been added'
-        ];
+        return ['task' => $task, 'time' => now()];
     }
 
     /**
@@ -41,6 +40,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        Gate::authorize('access', $task);
+
         return $task;
     }
 
@@ -49,10 +50,12 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        Gate::authorize('access', $task);
+
         $fields = $request->validate([
-            'title' => 'required|string|max:15',
-            'description' => 'required|string|max:35',
-            'due_date' => 'required|date_format:Y-m-d H:i|after:now',
+            'title' => 'string|max:15',
+            'description' => 'string|max:35',
+            'due_date' => 'date_format:Y-m-d H:i|after:now',
         ]);
 
         $task->update($fields);
@@ -67,6 +70,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        Gate::authorize('access', $task);
+
         $task->delete();
 
         return [

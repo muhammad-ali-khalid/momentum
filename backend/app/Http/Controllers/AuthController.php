@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -17,6 +18,9 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed'
         ]);
 
+        $fields['email_verified_at'] = now();
+        $fields['remember_token'] = Str::random(10);
+        
         // Creating user
         User::create($fields);
 
