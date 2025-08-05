@@ -21,8 +21,19 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            ''
-        ])
+            'title' => 'required|string|max:15',
+            'description' => 'required|string|max:35',
+            'due_date' => 'required|date_format:Y-m-d H:i|after:now'
+        ]);
+
+        $fields['user_id'] = 4;
+        $fields['status'] = 'active';
+
+        Task::create($fields);
+
+        return [
+            'message' => 'The task has been added'
+        ];
     }
 
     /**
@@ -38,7 +49,17 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $fields = $request->validate([
+            'title' => 'required|string|max:15',
+            'description' => 'required|string|max:35',
+            'due_date' => 'required|date_format:Y-m-d H:i|after:now',
+        ]);
+
+        $task->update($fields);
+
+        return [
+            'message' => 'Task has been updated'
+        ];
     }
 
     /**
@@ -46,6 +67,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return [
+            'message' => 'The task has been deleted'
+        ];
     }
 }
