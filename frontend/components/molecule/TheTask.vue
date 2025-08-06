@@ -5,6 +5,8 @@ type Task = {
   description: string;
   dueDate: Date;
   status: "active" | "completed" | "missed";
+  created_at: Date;
+  updated_at: Date;
 };
 
 const props = defineProps<{ task: Task }>();

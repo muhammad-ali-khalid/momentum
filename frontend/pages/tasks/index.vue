@@ -1,11 +1,19 @@
 <script setup lang="ts">
-type Task = {
-  id: number;
-  title: string;
-  description: string;
-  dueDate: Date;
-  status: "active" | "completed" | "missed";
-};
+const { $axios } = useNuxtApp();
+
+let tasks: Array<any>;
+
+onBeforeMount(async () => {
+  let token = localStorage.getItem("token");
+  const res = await $axios.get("/tasks", {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  tasks = res.data;
+  console.log(tasks);
+});
 
 const filters: Array<string> = ["All", "Active", "Completed", "Missed"];
 
@@ -16,37 +24,6 @@ const activeFilterClass =
 
 const nonActiveFilterClass =
   "text-sm font-medium whitespace-nowrap inline px-3 py-1 text-sm font-normal rounded-full text-gray-700 gap-x-2 bg-gray-100/60 dark:text-gray-200 dark:bg-gray-800 hover:cursor-pointer";
-
-const tasks: Array<Task> = [
-  {
-    id: 1,
-    title: "Buy Grocery",
-    description: "Buy milk and eggs",
-    dueDate: new Date(2025, 8, 10),
-    status: "active",
-  },
-  {
-    id: 2,
-    title: "Read book",
-    description: "Finish Deep Work",
-    dueDate: new Date(2025, 9, 23),
-    status: "active",
-  },
-  {
-    id: 3,
-    title: "Buy Grocery",
-    description: "Buy milk and eggs",
-    dueDate: new Date(2025, 8, 10),
-    status: "active",
-  },
-  {
-    id: 4,
-    title: "Read book",
-    description: "Finish Deep Work",
-    dueDate: new Date(2025, 9, 23),
-    status: "active",
-  },
-];
 </script>
 
 <template>
