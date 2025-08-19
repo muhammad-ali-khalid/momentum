@@ -1,3 +1,16 @@
+<script setup lang="ts">
+const {$axios} = useNuxtApp();
+
+const email = ref(null);
+const password = ref(null);
+
+async function handleRegisterFunction(){
+  const res = await $axios.post('/register', {
+    email
+  });
+}
+
+</script>
 <template>
   <section class="bg-white dark:bg-gray-900">
     <div class="flex justify-center min-h-screen">

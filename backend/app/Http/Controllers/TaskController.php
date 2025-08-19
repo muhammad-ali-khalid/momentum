@@ -11,9 +11,17 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Task::where('user_id', auth()->id())->get();
+        $status = $request->query('status');
+
+        $query = Task::where('user_id', auth()->id());
+
+        if ($status && in_array($status, ['active', 'missed', 'completed'])) {
+            $query->where('status', $status);
+        }
+
+        return $query->orderBy('due_date')->get();
     }
 
     /**

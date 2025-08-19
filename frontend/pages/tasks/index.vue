@@ -1,19 +1,62 @@
 <script setup lang="ts">
 const { $axios } = useNuxtApp();
 
-let tasks: Array<any>;
+const deleteStore = useDeleteStore();
+
+const logoutStore = useLogoutStore();
+
+type Task = {
+  id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  due_date: string;
+  status: "active" | "completed" | "missed";
+  created_at: string;
+  updated_at: string;
+};
+
+const taskHeading = ref("All");
+
+const tasks = ref(Array<Task>);
+
+const taskID = ref(null);
 
 onBeforeMount(async () => {
   let token = localStorage.getItem("token");
   const res = await $axios.get("/tasks", {
     headers: {
-      Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-  tasks = res.data;
-  console.log(tasks);
+  tasks.value = res.data;
 });
+
+async function handleFilterOperation(index: number) {
+  const token = localStorage.getItem("token");
+  let status: string | null = null;
+
+  switch (index) {
+    case 1:
+      status = "active";
+      break;
+    case 2:
+      status = "completed";
+      break;
+    case 3:
+      status = "missed";
+      break;
+  }
+
+  const res = await $axios.get("/tasks", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: status ? { status } : {},
+  });
+
+  tasks.value = res.data;
+}
 
 const filters: Array<string> = ["All", "Active", "Completed", "Missed"];
 
@@ -28,9 +71,17 @@ const nonActiveFilterClass =
 
 <template>
   <div class="h-screen dark:bg-gray-900">
+    <div class="flex justify-end pt-5 pr-5">
+      <button
+        @click="logoutStore.open()"
+        class="text-blue-500 underline cursor-pointer"
+      >
+        Logout
+      </button>
+    </div>
     <div class="@container">
       <div class="px-6 @sm:flex @sm:flex-col @sm:items-center">
-        <div class="text-3xl dark:text-white pt-4">All Tasks</div>
+        <div class="text-3xl pt-5 dark:text-white">{{ taskHeading }} Tasks</div>
         <div class="flex gap-2 py-2 overflow-x-auto">
           <button
             :class="
@@ -38,7 +89,11 @@ const nonActiveFilterClass =
             "
             v-for="(filter, i) in filters"
             :id="filter"
-            @click="activeFilter = i"
+            @click="
+              activeFilter = i;
+              taskHeading = filter;
+              handleFilterOperation(i);
+            "
           >
             {{ filter }}
           </button>
@@ -95,11 +150,55 @@ const nonActiveFilterClass =
                 <tbody
                   class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
                 >
-                  <MoleculeTheTask
-                    v-for="task in tasks"
-                    :id="task.id"
-                    :task="task"
-                  />
+                  <tr v-for="(task, i) in tasks" :id="task.id">
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <h2 class="font-medium text-gray-800 dark:text-white">
+                          {{ task.title }}
+                        </h2>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                      <div>
+                        <h4 class="text-gray-700 dark:text-gray-200">
+                          {{ task.description }}
+                        </h4>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                      <div>
+                        <h4 class="text-gray-700 dark:text-gray-200">
+                          {{ task.due_date }}
+                        </h4>
+                      </div>
+                    </td>
+                    <td
+                      class="px-12 py-4 text-sm font-medium whitespace-nowrap"
+                    >
+                      <div
+                        class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800"
+                      >
+                        {{ task.status }}
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                      <div class="flex flex-col gap-2">
+                        <NuxtLink
+                          :to="`/tasks/${task.id}/edit`"
+                          class="text-blue-500 underline"
+                          >Edit</NuxtLink
+                        >
+                        <NuxtLink
+                          @click="
+                            $route.params.id = task.id;
+                            deleteStore.open();
+                          "
+                          class="text-blue-500 underline cursor-pointer"
+                          >Delete</NuxtLink
+                        >
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -108,7 +207,7 @@ const nonActiveFilterClass =
       </div>
     </section>
 
-    <div class="flex justify-center mt-4">
+    <div class="flex justify-center mt-10">
       <NuxtLink
         to="/tasks/new"
         class="px-10 py-2 text-md text-white bg-blue-500 border rounded-md border-blue-500 hover:bg-blue-400 hover:cursor-pointer"
@@ -117,4 +216,6 @@ const nonActiveFilterClass =
       </NuxtLink>
     </div>
   </div>
+  <MoleculeLogoutDialog />
+  <MoleculeDeleteDialog />
 </template>

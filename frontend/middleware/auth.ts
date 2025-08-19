@@ -1,3 +1,5 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  return navigateTo("/login");
+  if(!localStorage.getItem('token')){
+    return navigateTo("/login");
+  }
 });
