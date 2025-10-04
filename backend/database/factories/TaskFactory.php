@@ -28,7 +28,7 @@ class TaskFactory extends Factory
         }
 
         return [
-            'user_id' => fake()->numberBetween(1, 5),
+            'user_id' => fake()->numberBetween(1, 10),
             'title' => fake()->realText(15),
             'description' => fake()->realText(35),
             'due_date' => $dueDate,
